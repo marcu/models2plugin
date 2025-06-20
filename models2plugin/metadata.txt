@@ -1,0 +1,26 @@
+[general]
+name=Models to plugin
+about=This plugin helps you for generating a plugin embedding your models
+category=None
+hasProcessingProvider=False
+description=This plugin helps you for generating a plugin embedding your models
+icon=resources/images/default_icon.png
+tags=plugin,model
+
+# credits and contact
+author=Marc Ducobu
+email=marc.ducobu@posteo.be
+homepage=https://gitlab.com/WAPY/models2plugin/
+repository=https://gitlab.com/WAPY/models2plugin/
+tracker=https://gitlab.com/WAPY/models2plugin//issues/
+
+# experimental flag
+deprecated=False
+experimental=True
+qgisMinimumVersion=3.40
+qgisMaximumVersion=3.99
+supportsQt6=True
+
+# versioning
+version=0.1.0
+changelog=
