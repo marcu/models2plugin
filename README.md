@@ -15,18 +15,6 @@
 
 | Cookiecutter option | Picked value |
 | :------------------ | :----------: |
-| Plugin name | Models to plugin |
-| Plugin name slugified | models2plugin |
-| Plugin name class (used in code) | Models2Plugin |
-| Plugin category | None |
-| Plugin description short | This plugin helps you for generating a plugin embedding your models |
-| Plugin description long | This plugin helps you for generating a plugin embedding your models |
-| Plugin tags | plugin,model |
-| Plugin icon | default_icon.png |
-| Plugin with processing provider | False |
-| Author name | Marc Ducobu |
-| Author organization | WAPY |
-| Author email | marc.ducobu@posteo.be |
 | Minimum QGIS version | 3.40 |
 | Maximum QGIS version | 3.99 |
 | Support Qt6 | True |
@@ -108,7 +96,7 @@ The documentation is located in `docs` subfolder, written in Markdown using [mys
 1. Add the remote repository to your local repository:
 
     ```sh
-    git remote add origin https://gitlab.com/WAPY/models2plugin/
+    git remote add origin https://github.com/marcu/models2plugin
     ```
 
 1. Commit changes:
