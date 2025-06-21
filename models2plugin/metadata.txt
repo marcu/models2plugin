@@ -4,15 +4,16 @@ about=This plugin helps you for generating a plugin embedding your models
 category=None
 hasProcessingProvider=False
 description=This plugin helps you for generating a plugin embedding your models
-icon=resources/images/default_icon.png
+icon=resources/images/icon.png
 tags=plugin,model
 
 # credits and contact
-author=Marc Ducobu
+author=Marc Ducobu, Etienne Trimaille
+organization=Barcamp des Rencontres QGIS-FR
 email=marc.ducobu@posteo.be
-homepage=https://gitlab.com/WAPY/models2plugin/
-repository=https://gitlab.com/WAPY/models2plugin/
-tracker=https://gitlab.com/WAPY/models2plugin//issues/
+homepage=https://github.com/marcu/models2plugin
+repository=https://github.com/marcu/models2plugin
+tracker=https://github.com/marcu/models2plugin/issues
 
 # experimental flag
 deprecated=False

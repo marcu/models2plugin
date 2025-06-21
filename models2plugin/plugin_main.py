@@ -2,10 +2,11 @@
 
 """Main plugin module."""
 
+import os
+
 # standard
 from functools import partial
 from pathlib import Path
-from typing import Optional
 
 # PyQGIS
 from qgis.core import QgsApplication, QgsSettings
@@ -22,6 +23,7 @@ from models2plugin.__about__ import (
     __uri_homepage__,
 )
 from models2plugin.gui.dlg_settings import PlgOptionsFactory
+from models2plugin.gui.main_dlg import MainDialog
 from models2plugin.toolbelt import PlgLogger
 
 # ############################################################################
@@ -39,6 +41,9 @@ class Models2PluginPlugin:
         """
         self.iface = iface
         self.log = PlgLogger().log
+        self.model_list_dlg = None
+
+        self.actions: list[QAction] = []
 
         # translation
         # initialize the locale
@@ -84,6 +89,23 @@ class Models2PluginPlugin:
                 currentPage="mOptionsPage{}".format(__title__)
             )
         )
+
+        # Main Dialog
+        self.main_dlg = MainDialog()
+
+        main_dlg_icon_path = os.path.join(DIR_PLUGIN_ROOT, "resources/images/icon.png")
+
+        self.action_main_dialog = QAction(
+            QIcon(main_dlg_icon_path),
+            self.tr("Main Dialog"),
+            self.iface.mainWindow(),
+        )
+
+        self.action_main_dialog.triggered.connect(lambda: self.main_dlg.show())
+
+        self.iface.addToolBarIcon(self.action_main_dialog)
+
+        self.actions.append(self.action_main_dialog)
 
         # -- Menu
         self.iface.addPluginToMenu(__title__, self.action_settings)
@@ -136,20 +158,6 @@ class Models2PluginPlugin:
         del self.action_settings
         del self.action_help
 
-    def run(self):
-        """Main process.
-
-        :raises Exception: if there is no item in the feed
-        """
-        try:
-            self.log(
-                message=self.tr("Everything ran OK."),
-                log_level=3,
-                push=False,
-            )
-        except Exception as err:
-            self.log(
-                message=self.tr("Houston, we've got a problem: {}".format(err)),
-                log_level=2,
-                push=True,
-            )
+        for action in self.actions:
+            self.iface.removeToolBarIcon(action)
+            self.iface.removePluginMenu(__title__, action)
