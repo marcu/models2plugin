@@ -1,4 +1,5 @@
 import os
+from functools import partial
 from pathlib import Path
 
 from qgis.PyQt import QtWidgets, uic
@@ -14,16 +15,41 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
         super().__init__(parent)
         self.setupUi(self)
 
-        self.menu_widget.currentRowChanged.connect(self.handle_page_change)
+        self.menu_widget.currentRowChanged.connect(self.display_page)
+        self.nextButton.clicked.connect(self.go_to_next_page)
+        self.previousButton.clicked.connect(self.go_to_previous_page)
+
+        self.display_page(0)
 
         # display the models in the model list widget
         for model_file in self.modelListFileName():
             self.modelListWidget.addItem(model_file)
 
-    def handle_page_change(self, index: int):
-        """Handles page switching and clears selection in all layers."""
+    def go_to_next_page(self):
+        """Switches to the next page in the stacked widget."""
+        current_index = self.stacked_panels_widget.currentIndex()
+        next_index = current_index + 1
+        self.display_page(next_index)
 
-        self.stacked_panels_widget.setCurrentIndex(index)
+    def go_to_previous_page(self):
+        """Switches to the previous page in the stacked widget."""
+        current_index = self.stacked_panels_widget.currentIndex()
+        previous_index = current_index - 1
+        self.display_page(previous_index)
+
+    def display_page(self, index: int):
+        """Displays the specified page in the stacked widget."""
+
+        if 0 <= index < self.stacked_panels_widget.count():
+            self.stacked_panels_widget.setCurrentIndex(index)
+
+        self.menu_widget.setCurrentRow(index)
+
+        previous_button_enabled = index > 0
+        self.previousButton.setEnabled(previous_button_enabled)
+
+        next_button_enabled = index < self.stacked_panels_widget.count() - 1
+        self.nextButton.setEnabled(next_button_enabled)
 
     def modelListFileName(self):
         current_profile = iface.userProfileManager().getProfile()
