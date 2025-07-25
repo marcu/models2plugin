@@ -26,6 +26,8 @@ from models2plugin.gui.dlg_settings import PlgOptionsFactory
 from models2plugin.gui.main_dlg import MainDialog
 from models2plugin.toolbelt import PlgLogger
 
+from .generator import generate
+
 # ############################################################################
 # ########## Classes ###############
 # ##################################
@@ -92,6 +94,8 @@ class Models2PluginPlugin:
 
         # Main Dialog
         self.main_dlg = MainDialog()
+
+        self.main_dlg.generatePushButton.clicked.connect(self.generate_slot)
 
         main_dlg_icon_path = os.path.join(DIR_PLUGIN_ROOT, "resources/images/icon.png")
 
@@ -161,3 +165,6 @@ class Models2PluginPlugin:
         for action in self.actions:
             self.iface.removeToolBarIcon(action)
             self.iface.removePluginMenu(__title__, action)
+
+    def generate_slot(self):
+        generate()
