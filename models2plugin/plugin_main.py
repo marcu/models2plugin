@@ -25,6 +25,7 @@ from models2plugin.__about__ import (
 from models2plugin.gui.dlg_settings import PlgOptionsFactory
 from models2plugin.gui.main_dlg import MainDialog
 from models2plugin.toolbelt import PlgLogger
+from models2plugin.toolbelt.utils import get_line_edit_content, to_snake_case
 
 from .generator import generate
 
@@ -167,4 +168,24 @@ class Models2PluginPlugin:
             self.iface.removePluginMenu(__title__, action)
 
     def generate_slot(self):
-        generate()
+
+        plugin_name = get_line_edit_content(
+            self.main_dlg.pluginNameLineEdit, "MyPlugin"
+        )
+
+        plugin_folder_name = to_snake_case(plugin_name)
+
+        context = {  # to be configure by user
+            "plugin_name": plugin_name,
+            "plugin_folder_name": plugin_folder_name,
+            "qgis_minimum_version": "3.22",
+            "plugin_description": "Bla bla bla",
+            "about": "Bla bla about",
+            "plugin_version": "1.0.0",
+            "author": get_line_edit_content(
+                self.main_dlg.authorLineEdit, "Author Name"
+            ),
+            "author_email": get_line_edit_content(self.main_dlg.emailLineEdit, "Email"),
+        }
+
+        generate(context)

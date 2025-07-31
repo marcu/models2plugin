@@ -204,7 +204,7 @@ QListWidget::item::selected {
                 <widget class="QLineEdit" name="emailLineEdit"/>
                </item>
                <item row="3" column="1">
-                <widget class="QPlainTextEdit" name="descriptionTextEdit"/>
+                <widget class="QTextEdit" name="descriptionTextEdit"/>
                </item>
               </layout>
              </item>

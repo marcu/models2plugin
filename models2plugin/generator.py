@@ -6,24 +6,9 @@ from pathlib import Path
 
 from models2plugin.__about__ import DIR_PLUGIN_ROOT
 
-# Chemins
 plugin_template_dir = Path(
     DIR_PLUGIN_ROOT, "template/plugin"
 )  # Directory containing the plugin template files
-plugin_output_dir = Path(
-    DIR_PLUGIN_ROOT, "output/blabla"
-)  # Directory where the generated plugin will be saved
-
-
-contexte = {  # to be configure by user
-    "plugin_name": "TestPlugin",
-    "qgis_minimum_version": "3.22",
-    "plugin_description": "Bla bla bla",
-    "about": "Bla bla about",
-    "plugin_version": "1.0.0",
-    "author": "ICI Moi",
-    "author_email": "Email",
-}
 
 
 # Render the template by replacing variables in the content
@@ -41,7 +26,12 @@ def render_template(contenu, variables):
     return contenu
 
 
-def generate():
+def generate(context):
+
+    plugin_output_dir = Path(
+        DIR_PLUGIN_ROOT, "output", context.get("plugin_folder_name")
+    )  # Directory where the generated plugin will be saved
+
     """Generate a QGIS plugin from a template by replacing variables in the template files."""
     # Walking through the source template dir
     for root, _, files in os.walk(plugin_template_dir):
@@ -62,7 +52,7 @@ def generate():
                 # Otherwise, we assume it's a text file and generate the content using the template
                 with open(absolute_path, "r", encoding="utf-8") as f:
                     contenu = f.read()
-                rendu = render_template(contenu, contexte)
+                rendu = render_template(contenu, context)
 
                 # Write the rendered content to the destination file
                 with open(destination_file, "w", encoding="utf-8") as f:
