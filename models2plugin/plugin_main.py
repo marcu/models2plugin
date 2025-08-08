@@ -174,10 +174,14 @@ class Models2PluginPlugin:
         )
 
         plugin_folder_name = to_snake_case(plugin_name)
+        plugin_provider_id = to_snake_case(plugin_name)
+        # remove the _ to only have characters
+        plugin_provider_id = plugin_provider_id.replace("_", "")
 
         context = {  # to be configure by user
             "plugin_name": plugin_name,
             "plugin_folder_name": plugin_folder_name,
+            "plugin_provider_id": plugin_provider_id,
             "qgis_minimum_version": "3.22",
             "plugin_description": "Bla bla bla",
             "about": "Bla bla about",
@@ -188,4 +192,8 @@ class Models2PluginPlugin:
             "author_email": get_line_edit_content(self.main_dlg.emailLineEdit, "Email"),
         }
 
-        generate(context)
+        models_to_include = [
+            item.text() for item in self.main_dlg.modelListWidget.selectedItems()
+        ]
+
+        generate(context, models_to_include=models_to_include)

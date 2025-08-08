@@ -4,11 +4,18 @@ import re
 import shutil
 from pathlib import Path
 
+from qgis.core import Qgis
+from qgis.utils import iface
+
 from models2plugin.__about__ import DIR_PLUGIN_ROOT
+from models2plugin.toolbelt import PlgLogger
 
 plugin_template_dir = Path(
     DIR_PLUGIN_ROOT, "template/plugin"
 )  # Directory containing the plugin template files
+
+
+logger = PlgLogger()
 
 
 # Render the template by replacing variables in the content
@@ -26,7 +33,7 @@ def render_template(contenu, variables):
     return contenu
 
 
-def generate(context):
+def generate(context, models_to_include: list[str] = []):
 
     plugin_output_dir = Path(
         DIR_PLUGIN_ROOT, "output", context.get("plugin_folder_name")
@@ -51,9 +58,32 @@ def generate(context):
             else:
                 # Otherwise, we assume it's a text file and generate the content using the template
                 with open(absolute_path, "r", encoding="utf-8") as f:
-                    contenu = f.read()
-                rendu = render_template(contenu, context)
+                    content = f.read()
+                rendered_content = render_template(content, context)
 
                 # Write the rendered content to the destination file
                 with open(destination_file, "w", encoding="utf-8") as f:
-                    f.write(rendu)
+                    f.write(rendered_content)
+
+    plutin_output_models_dir = plugin_output_dir / "models"
+    os.makedirs(plutin_output_models_dir, exist_ok=True)
+
+    for model_to_include in models_to_include:
+        logger.log(
+            f"Processing model: {model_to_include}", log_level=Qgis.MessageLevel.Info
+        )
+
+        current_profile = iface.userProfileManager().getProfile()
+        current_profile_folder = current_profile.folder()
+        models_dir = os.path.join(current_profile_folder, "processing", "models")
+
+        model_path = Path(models_dir, model_to_include)
+
+        if model_path.exists():
+            # Copy the model file to the plugin output directory
+            shutil.copy(model_path, plutin_output_models_dir / model_path.name)
+        else:
+            logger.log(
+                f"Model file {model_to_include} does not exist and will not be copied.",
+                log_level=Qgis.MessageLevel.Critical,
+            )
