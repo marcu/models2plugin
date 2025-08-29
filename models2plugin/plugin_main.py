@@ -44,7 +44,6 @@ class Models2PluginPlugin:
         """
         self.iface = iface
         self.log = PlgLogger().log
-        self.model_list_dlg = None
 
         self.actions: list[QAction] = []
 
@@ -173,6 +172,8 @@ class Models2PluginPlugin:
             self.main_dlg.pluginNameLineEdit, "MyPlugin"
         )
 
+        plugin_output_directory = self.main_dlg.outputDirectoryFileWidget.filePath()
+
         plugin_folder_name = to_snake_case(plugin_name)
         plugin_provider_id = to_snake_case(plugin_name)
         # remove the _ to only have characters
@@ -196,4 +197,8 @@ class Models2PluginPlugin:
             item.text() for item in self.main_dlg.modelListWidget.selectedItems()
         ]
 
-        generate(context, models_to_include=models_to_include)
+        generate(plugin_output_directory, context, models_to_include=models_to_include)
+
+        self.main_dlg.informationTextBrowser.setText(
+            f"Plugin generated at {plugin_output_directory}"
+        )

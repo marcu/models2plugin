@@ -33,11 +33,10 @@ def render_template(contenu, variables):
     return contenu
 
 
-def generate(context, models_to_include: list[str] = []):
+def generate(plugin_output_dir, context, models_to_include: list[str] = []):
 
-    plugin_output_dir = Path(
-        DIR_PLUGIN_ROOT, "output", context.get("plugin_folder_name")
-    )  # Directory where the generated plugin will be saved
+    plugin_output_dir: Path = Path(plugin_output_dir)
+    plugin_output_dir.mkdir(parents=True, exist_ok=True)
 
     """Generate a QGIS plugin from a template by replacing variables in the template files."""
     # Walking through the source template dir

@@ -1,9 +1,11 @@
 import os
-from functools import partial
 from pathlib import Path
 
 from qgis.PyQt import QtWidgets, uic
 from qgis.utils import iface
+
+from models2plugin.__about__ import DIR_PLUGIN_ROOT
+from models2plugin.toolbelt.utils import get_line_edit_content, to_snake_case
 
 FORM_CLASS, _ = uic.loadUiType(
     Path(__file__).parent / "{}.ui".format(Path(__file__).stem)
@@ -24,6 +26,10 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
         # display the models in the model list widget
         for model_file in self.modelListFileName():
             self.modelListWidget.addItem(model_file)
+
+        self.pluginNameLineEdit.editingFinished.connect(
+            self.updateOutputDirectoryFileSlot
+        )
 
     def go_to_next_page(self):
         """Switches to the next page in the stacked widget."""
@@ -62,3 +68,11 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
             for filename in os.listdir(models_dir)
             if filename.endswith(".model3")
         ]
+
+    def updateOutputDirectoryFileSlot(self):
+        """Update the output directory based on the plugin name."""
+
+        plugin_name = get_line_edit_content(self.pluginNameLineEdit, "MyPlugin")
+        plugin_folder_name = to_snake_case(plugin_name)
+        plugin_template_dir = Path(DIR_PLUGIN_ROOT, "output", plugin_folder_name)
+        self.outputDirectoryFileWidget.setFilePath(str(plugin_template_dir))
