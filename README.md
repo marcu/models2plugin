@@ -7,7 +7,25 @@ Models2plugin helps you for generating a plugin which will add your models autom
 
 ## Documentation
 
-TBD.
+### How to generate a plugin using Models2plugin
+
+Click on the action of the toolbar to open the main dialog of the plugin and fill the form.
+
+![First page of main dialog](./docs/img/screen1.png)
+
+
+Then choose the models you want to add in the plugin.
+
+![plot](./docs/img/screen2.png)
+
+Finally, choose the output folder and click on the button "Generate the plugin". You wiil find your plugin in the output folder you specified.
+
+![plot](./docs/img/screen3.png)
+
+### Description of the generated plugin
+
+TBD
+
 
 ## License
 
