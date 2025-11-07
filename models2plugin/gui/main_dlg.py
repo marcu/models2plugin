@@ -5,7 +5,7 @@ from qgis.PyQt import QtWidgets, uic
 from qgis.utils import iface
 
 from models2plugin.__about__ import DIR_PLUGIN_ROOT
-from models2plugin.toolbelt.utils import get_line_edit_content, to_snake_case
+from models2plugin.toolbelt.utils import get_text_content, to_snake_case
 
 FORM_CLASS, _ = uic.loadUiType(
     Path(__file__).parent / "{}.ui".format(Path(__file__).stem)
@@ -72,7 +72,7 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
     def updateOutputDirectoryFileSlot(self):
         """Update the output directory based on the plugin name."""
 
-        plugin_name = get_line_edit_content(self.pluginNameLineEdit, "MyPlugin")
+        plugin_name = get_text_content(self.pluginNameLineEdit, "MyPlugin")
         plugin_folder_name = to_snake_case(plugin_name)
         plugin_template_dir = Path(DIR_PLUGIN_ROOT, "output", plugin_folder_name)
         self.outputDirectoryFileWidget.setFilePath(str(plugin_template_dir))

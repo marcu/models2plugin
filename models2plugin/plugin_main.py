@@ -25,7 +25,7 @@ from models2plugin.__about__ import (
 from models2plugin.gui.dlg_settings import PlgOptionsFactory
 from models2plugin.gui.main_dlg import MainDialog
 from models2plugin.toolbelt import PlgLogger
-from models2plugin.toolbelt.utils import get_line_edit_content, to_snake_case
+from models2plugin.toolbelt.utils import get_text_content, to_snake_case
 
 from .generator import generate
 
@@ -167,10 +167,7 @@ class Models2PluginPlugin:
             self.iface.removePluginMenu(__title__, action)
 
     def generate_slot(self):
-
-        plugin_name = get_line_edit_content(
-            self.main_dlg.pluginNameLineEdit, "MyPlugin"
-        )
+        plugin_name = get_text_content(self.main_dlg.pluginNameLineEdit, "MyPlugin")
 
         plugin_output_directory = self.main_dlg.outputDirectoryFileWidget.filePath()
 
@@ -183,14 +180,14 @@ class Models2PluginPlugin:
             "plugin_name": plugin_name,
             "plugin_folder_name": plugin_folder_name,
             "plugin_provider_id": plugin_provider_id,
-            "qgis_minimum_version": "3.22",
-            "plugin_description": "Bla bla bla",
-            "about": "Bla bla about",
-            "plugin_version": "1.0.0",
-            "author": get_line_edit_content(
-                self.main_dlg.authorLineEdit, "Author Name"
+            "qgis_minimum_version": "3.22",  # TODO make it configurable
+            "plugin_description": get_text_content(
+                self.main_dlg.descriptionTextEdit, "Description"
             ),
-            "author_email": get_line_edit_content(self.main_dlg.emailLineEdit, "Email"),
+            "about": get_text_content(self.main_dlg.descriptionTextEdit, "Description"),
+            "plugin_version": "1.0.0",  # TODO make it configurable
+            "author": get_text_content(self.main_dlg.authorLineEdit, "Author Name"),
+            "author_email": get_text_content(self.main_dlg.emailLineEdit, "Email"),
         }
 
         models_to_include = [

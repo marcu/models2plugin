@@ -1,19 +1,30 @@
 import re
 
-from qgis.PyQt.QtWidgets import QLineEdit
+from qgis.PyQt.QtWidgets import QLineEdit, QTextEdit, QWidget
 
 
-def get_line_edit_content(line_edit: QLineEdit, default_value: str = "") -> str:
-    """Retrieve the content of a QLineEdit, returning a default value if empty.
+def get_text_content(widget: QWidget, default_value: str = "") -> str:
+    """Retrieve the content of a QLineEdit or a QTextEdi, returning a default value if empty.
 
     Args:
-        line_edit (QLineEdit): The QLineEdit widget to retrieve content from.
+        widget (QTextEdit or QWidget): The widget to retrieve content from.
         default_value (str): The value to return if the QLineEdit is empty.
 
     Returns:
         str: The content of the QLineEdit or the default value if empty.
     """
-    content = line_edit.text().strip()
+
+    content = None
+
+    if isinstance(widget, QLineEdit):
+        content = widget.text().strip()
+    elif isinstance(widget, QTextEdit):
+        content = widget.toPlainText().strip()
+    else:
+        raise TypeError(
+            "Unsupported widget type. Only QLineEdit and QTextEdit are supported."
+        )
+
     return content if content else default_value
 
 
