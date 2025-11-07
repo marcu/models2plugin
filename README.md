@@ -42,15 +42,7 @@ The base code has been generated with [QGIS Plugin Templater](https://oslandia.g
 
 | Cookiecutter option | Picked value |
 | :------------------ | :----------: |
-| Minimum QGIS version | 3.40 |
-| Maximum QGIS version | 3.99 |
-| Support Qt6 | True |
-| Git repository URL | https://gitlab.com/WAPY/models2plugin/ |
-| Git default branch | main |
-| License | MIT |
 | Python linter | Ruff |
 | CI/CD platform | GitHub |
 | Publish to <https://plugins.qgis.org> using CI/CD | True |
 | IDE | VSCode |
-
-
