@@ -5,7 +5,7 @@ category=None
 hasProcessingProvider=False
 description=This plugin helps you for generating a plugin embedding your models
 icon=resources/images/icon.png
-tags=plugin,model
+tags=processing,generator,model,plugin
 
 # credits and contact
 author=Marc Ducobu, Etienne Trimaille
@@ -18,8 +18,7 @@ tracker=https://github.com/marcu/models2plugin/issues
 # experimental flag
 deprecated=False
 experimental=True
-qgisMinimumVersion=3.40
-qgisMaximumVersion=3.99
+qgisMinimumVersion=3.34
 supportsQt6=True
 
 # versioning
