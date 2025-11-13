@@ -20,7 +20,7 @@
    </sizepolicy>
   </property>
   <property name="windowTitle">
-   <string notr="true">OASIS</string>
+   <string notr="true">TEST11</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
