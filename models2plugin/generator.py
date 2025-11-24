@@ -4,10 +4,13 @@ import re
 import shutil
 from pathlib import Path
 
-from qgis.core import Qgis
+from qgis.core import Qgis, QgsMessageLog
 from qgis.utils import iface
 
 from models2plugin.__about__ import DIR_PLUGIN_ROOT
+from models2plugin.qml_parser import (
+    extract_qml_paths_from_model_content,
+)
 from models2plugin.toolbelt import PlgLogger
 
 plugin_template_dir = Path(
@@ -79,8 +82,40 @@ def generate(plugin_output_dir, context, models_to_include: list[str] = []):
         model_path = Path(models_dir, model_to_include)
 
         if model_path.exists():
-            # Copy the model file to the plugin output directory
-            shutil.copy(model_path, plutin_output_models_dir / model_path.name)
+            # Read the model file content and extract QML file paths
+            try:
+                with open(model_path, "r", encoding="utf-8") as f:
+                    model_content = f.read()
+                    
+                qml_paths = extract_qml_paths_from_model_content(model_content)
+                
+                # Copy the model file as-is (QML paths will be replaced at plugin initialization time)
+                # This is necessary because we don't know the final installation path at generation time
+                output_model_path = plutin_output_models_dir / model_path.name
+                shutil.copy(model_path, output_model_path)
+            
+                # Copy QML files to the plugin output directory
+                for qml_path_str in qml_paths:
+                    qml_path = Path(qml_path_str)
+                    
+                    if qml_path.exists():
+                        # Copy the QML file to the plugin output directory
+                        shutil.copy(qml_path, plutin_output_models_dir / qml_path.name)
+                    
+                        logger.log(
+                            f"Copied QML file: {qml_path.name}",
+                            log_level=Qgis.MessageLevel.Info
+                        )
+                    else:
+                        logger.log(
+                            f"QML file {qml_path_str} does not exist and will not be copied.",
+                            log_level=Qgis.MessageLevel.Warning,
+                        )
+            except Exception as e:
+                logger.log(
+                    f"Error reading model file {model_to_include}: {e}",
+                    log_level=Qgis.MessageLevel.Warning
+                )
         else:
             logger.log(
                 f"Model file {model_to_include} does not exist and will not be copied.",

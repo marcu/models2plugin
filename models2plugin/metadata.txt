@@ -1,14 +1,14 @@
 [general]
 name=Models to plugin
-about=This plugin helps you for generating a plugin embedding your models
+about=This plugin helps you for generating a plugin embedding your models and applied styles files
 category=None
 hasProcessingProvider=False
-description=This plugin helps you for generating a plugin embedding your models
+description=This plugin helps you for generating a plugin embedding your models and applied styles files
 icon=resources/images/icon.png
 tags=processing,generator,model,plugin
 
 # credits and contact
-author=Marc Ducobu, Etienne Trimaille
+author=Marc Ducobu, Etienne Trimaille, Théo Nobella-Pichonnier
 organization=Barcamp des Rencontres QGIS-FR
 email=marc.ducobu@posteo.be
 homepage=https://github.com/marcu/models2plugin
@@ -22,5 +22,5 @@ qgisMinimumVersion=3.34
 supportsQt6=True
 
 # versioning
-version=0.1.0
+version=0.1.1
 changelog=

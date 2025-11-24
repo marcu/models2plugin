@@ -4,6 +4,8 @@ from pathlib import Path
 from qgis.core import QgsProcessingModelAlgorithm, QgsProcessingProvider
 from qgis.PyQt.QtGui import QIcon
 
+from .init_algorithm import InitializePluginAlgorithm
+
 DIR_PLUGIN_ROOT: Path = Path(__file__).parent
 
 
@@ -11,6 +13,10 @@ class Provider(QgsProcessingProvider):
     """The provider of our plugin."""
 
     def loadAlgorithms(self):
+        # Add the initialization algorithm first
+        self.addAlgorithm(InitializePluginAlgorithm())
+        
+        # Then load all model algorithms
         for model_path in DIR_PLUGIN_ROOT.glob("models/*.model3"):
             model = QgsProcessingModelAlgorithm()
             if model.fromFile(str(model_path)):
