@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+from qgis.core import QgsExpressionContext, QgsExpressionContextUtils, QgsExpression
+from qgis.gui import QgsFileWidget
 from qgis.PyQt import QtWidgets, uic
 from qgis.utils import iface
 
@@ -16,6 +18,9 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
+
+        self.authorLineEdit.setText(self.current_qgis_user())
+        self.outputDirectoryFileWidget.setStorageMode(QgsFileWidget.StorageMode.GetDirectory)
 
         self.menu_widget.currentRowChanged.connect(self.display_page)
         self.nextButton.clicked.connect(self.go_to_next_page)
@@ -56,6 +61,13 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
 
         next_button_enabled = index < self.stacked_panels_widget.count() - 1
         self.nextButton.setEnabled(next_button_enabled)
+
+    def current_qgis_user(self) -> str:
+        """ With a QGIS Expression, returns the current user name."""
+        context = QgsExpressionContext()
+        context.appendScope(QgsExpressionContextUtils.globalScope())
+        expression = QgsExpression("@user_full_name")
+        return expression.evaluate(context)
 
     def modelListFileName(self):
         current_profile = iface.userProfileManager().getProfile()
