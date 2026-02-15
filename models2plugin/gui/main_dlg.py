@@ -1,10 +1,14 @@
 import os
 from pathlib import Path
 
-from qgis.core import QgsExpressionContext, QgsExpressionContextUtils, QgsExpression
+from qgis.core import (
+    QgsApplication,
+    QgsExpression,
+    QgsExpressionContext,
+    QgsExpressionContextUtils,
+)
 from qgis.gui import QgsFileWidget
 from qgis.PyQt import QtWidgets, uic
-from qgis.utils import iface
 
 from models2plugin.__about__ import DIR_PLUGIN_ROOT
 from models2plugin.toolbelt.utils import get_text_content, to_snake_case
@@ -20,7 +24,9 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
         self.setupUi(self)
 
         self.authorLineEdit.setText(self.current_qgis_user())
-        self.outputDirectoryFileWidget.setStorageMode(QgsFileWidget.StorageMode.GetDirectory)
+        self.outputDirectoryFileWidget.setStorageMode(
+            QgsFileWidget.StorageMode.GetDirectory
+        )
 
         self.menu_widget.currentRowChanged.connect(self.display_page)
         self.nextButton.clicked.connect(self.go_to_next_page)
@@ -63,17 +69,16 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
         self.nextButton.setEnabled(next_button_enabled)
 
     def current_qgis_user(self) -> str:
-        """ With a QGIS Expression, returns the current user name."""
+        """With a QGIS Expression, returns the current user name."""
         context = QgsExpressionContext()
         context.appendScope(QgsExpressionContextUtils.globalScope())
         expression = QgsExpression("@user_full_name")
         return expression.evaluate(context)
 
     def modelListFileName(self):
-        current_profile = iface.userProfileManager().getProfile()
-        current_profile_folder = current_profile.folder()
-
-        models_dir = os.path.join(current_profile_folder, "processing", "models")
+        models_dir = os.path.join(
+            QgsApplication.qgisSettingsDirPath(), "processing", "models"
+        )
 
         return [
             filename
