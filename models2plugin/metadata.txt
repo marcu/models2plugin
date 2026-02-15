@@ -17,10 +17,10 @@ tracker=https://github.com/marcu/models2plugin/issues
 
 # experimental flag
 deprecated=False
-experimental=True
+experimental=False
 qgisMinimumVersion=3.34
 supportsQt6=True
 
 # versioning
-version=0.1.0
+version=0.1.1
 changelog=
