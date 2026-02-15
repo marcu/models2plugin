@@ -4,8 +4,7 @@ import re
 import shutil
 from pathlib import Path
 
-from qgis.core import Qgis
-from qgis.utils import iface
+from qgis.core import Qgis, QgsApplication
 
 from models2plugin.__about__ import DIR_PLUGIN_ROOT
 from models2plugin.toolbelt import PlgLogger
@@ -72,9 +71,9 @@ def generate(plugin_output_dir, context, models_to_include: list[str] = []):
             f"Processing model: {model_to_include}", log_level=Qgis.MessageLevel.Info
         )
 
-        current_profile = iface.userProfileManager().getProfile()
-        current_profile_folder = current_profile.folder()
-        models_dir = os.path.join(current_profile_folder, "processing", "models")
+        models_dir = os.path.join(
+            QgsApplication.qgisSettingsDirPath(), "processing", "models"
+        )
 
         model_path = Path(models_dir, model_to_include)
 
