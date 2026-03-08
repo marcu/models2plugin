@@ -19,7 +19,7 @@ tracker=https://github.com/marcu/models2plugin/issues
 deprecated=False
 experimental=False
 qgisMinimumVersion=3.34
-supportsQt6=True
+qgisMaximumVersion=4.99
 
 # versioning
 version=0.1.1
