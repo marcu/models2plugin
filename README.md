@@ -1,5 +1,6 @@
 # Models2plugin - QGIS Plugin
 
+[![QGIS.org](https://img.shields.io/badge/QGIS.org-published-green)](https://plugins.qgis.org/plugins/models2plugin)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit&logoColor=white)](https://github.com/pre-commit/pre-commit)
 
 
@@ -44,5 +45,5 @@ The base code has been generated with [QGIS Plugin Templater](https://oslandia.g
 | :------------------ | :----------: |
 | Python linter | Ruff |
 | CI/CD platform | GitHub |
-| Publish to <https://plugins.qgis.org> using CI/CD | True |
+| Publish to <https://plugins.qgis.org/plugins/models2plugin> using CI/CD | True |
 | IDE | VSCode |
