@@ -69,7 +69,9 @@ __icon_path__: Path = DIR_PLUGIN_ROOT.resolve() / __plugin_md__.get("general").g
     "icon"
 )
 __keywords__: list = [
-    t.strip() for t in __plugin_md__.get("general").get("repository").split("tags")
+    t.strip()
+    for t in __plugin_md__.get("general").get("tags", "").split(",")
+    if t.strip()
 ]
 __license__: str = "MIT"
 __summary__: str = "{}\n{}".format(
