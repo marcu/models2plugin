@@ -24,7 +24,7 @@ concurrency:
 jobs:
   translation:
     name: "💬 i18n compilation"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Get source code
@@ -58,7 +58,7 @@ jobs:
   # -- NO TAGS ----------------------------------------------------------------------
   packaging:
     name: "📦 Packaging plugin"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs:
       - translation
 
@@ -112,7 +112,7 @@ jobs:
   # -- ONLY TAGS ----------------------------------------------------------------------
   release:
     name: "🚀 Release on tag"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     needs:
