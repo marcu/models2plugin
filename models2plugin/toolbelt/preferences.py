@@ -50,6 +50,7 @@ class PlgSettingsStructure:
     # global
     debug_mode: bool = False
     version: str = __version__
+    models_folder: str = ""
 
 class PlgOptionsManager:
     @staticmethod
