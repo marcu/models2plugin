@@ -24,7 +24,7 @@ from models2plugin.__about__ import (
 )
 from models2plugin.gui.dlg_settings import PlgOptionsFactory
 from models2plugin.gui.main_dlg import MainDialog
-from models2plugin.toolbelt import PlgLogger
+from models2plugin.toolbelt import PlgLogger, PlgOptionsManager
 from models2plugin.toolbelt.utils import get_text_content, to_snake_case
 
 from .generator import generate
@@ -194,7 +194,21 @@ class Models2PluginPlugin:
             item.text() for item in self.main_dlg.modelListWidget.selectedItems()
         ]
 
-        generate(plugin_output_directory, context, models_to_include=models_to_include)
+        models_folder = (
+            self.main_dlg.modelsFolderFileWidget.filePath()
+            or self.main_dlg.default_models_folder()
+        )
+
+        settings = PlgOptionsManager.get_plg_settings()
+        settings.models_folder = models_folder
+        PlgOptionsManager.save_from_object(settings)
+
+        generate(
+            plugin_output_directory,
+            context,
+            models_to_include=models_to_include,
+            models_dir=models_folder,
+        )
 
         self.main_dlg.informationTextBrowser.setText(
             f"Plugin generated at {plugin_output_directory}"

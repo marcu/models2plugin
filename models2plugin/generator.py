@@ -3,6 +3,7 @@ import os
 import re
 import shutil
 from pathlib import Path
+from typing import Optional
 
 from qgis.core import Qgis, QgsApplication
 
@@ -32,7 +33,12 @@ def render_template(contenu, variables):
     return contenu
 
 
-def generate(plugin_output_dir, context, models_to_include: list[str] = []):
+def generate(
+    plugin_output_dir,
+    context,
+    models_to_include: list[str] = [],
+    models_dir: Optional[str] = None,
+):
 
     plugin_output_dir: Path = Path(plugin_output_dir)
     plugin_output_dir.mkdir(parents=True, exist_ok=True)
@@ -66,13 +72,14 @@ def generate(plugin_output_dir, context, models_to_include: list[str] = []):
     plutin_output_models_dir = plugin_output_dir / "models"
     os.makedirs(plutin_output_models_dir, exist_ok=True)
 
+    if not models_dir:
+        models_dir = os.path.join(
+            QgsApplication.qgisSettingsDirPath(), "processing", "models"
+        )
+
     for model_to_include in models_to_include:
         logger.log(
             f"Processing model: {model_to_include}", log_level=Qgis.MessageLevel.Info
-        )
-
-        models_dir = os.path.join(
-            QgsApplication.qgisSettingsDirPath(), "processing", "models"
         )
 
         model_path = Path(models_dir, model_to_include)

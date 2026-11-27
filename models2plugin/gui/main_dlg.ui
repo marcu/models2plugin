@@ -220,6 +220,16 @@ QListWidget::item::selected {
               </widget>
              </item>
              <item>
+              <widget class="QLabel" name="label_models_folder">
+               <property name="text">
+                <string>Models folder</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QgsFileWidget" name="modelsFolderFileWidget"/>
+             </item>
+             <item>
               <widget class="QListWidget" name="modelListWidget">
                <property name="selectionMode">
                 <enum>QAbstractItemView::MultiSelection</enum>

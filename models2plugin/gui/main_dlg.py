@@ -11,6 +11,7 @@ from qgis.gui import QgsFileWidget
 from qgis.PyQt import QtWidgets, uic
 
 from models2plugin.__about__ import DIR_PLUGIN_ROOT
+from models2plugin.toolbelt import PlgOptionsManager
 from models2plugin.toolbelt.utils import get_text_content, to_snake_case
 
 FORM_CLASS, _ = uic.loadUiType(
@@ -28,6 +29,19 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
             QgsFileWidget.StorageMode.GetDirectory
         )
 
+        self.modelsFolderFileWidget.setStorageMode(
+            QgsFileWidget.StorageMode.GetDirectory
+        )
+        # Force Qt's own directory picker: the system/KDE native one ignores the
+        # suggested starting folder and reopens on its own last-used location.
+        self.modelsFolderFileWidget.setOptions(
+            QtWidgets.QFileDialog.Option.DontUseNativeDialog
+        )
+        initial_models_folder = self.initial_models_folder()
+        self.modelsFolderFileWidget.setDefaultRoot(initial_models_folder)
+        self.modelsFolderFileWidget.setFilePath(initial_models_folder)
+        self.modelsFolderFileWidget.fileChanged.connect(self.on_models_folder_changed)
+
         self.menu_widget.currentRowChanged.connect(self.display_page)
         self.nextButton.clicked.connect(self.go_to_next_page)
         self.previousButton.clicked.connect(self.go_to_previous_page)
@@ -35,8 +49,7 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
         self.display_page(0)
 
         # display the models in the model list widget
-        for model_file in self.modelListFileName():
-            self.modelListWidget.addItem(model_file)
+        self.reload_model_list()
 
         self.pluginNameLineEdit.editingFinished.connect(
             self.updateOutputDirectoryFileSlot
@@ -75,10 +88,36 @@ class MainDialog(QtWidgets.QDialog, FORM_CLASS):
         expression = QgsExpression("@user_full_name")
         return expression.evaluate(context)
 
-    def modelListFileName(self):
-        models_dir = os.path.join(
+    def default_models_folder(self) -> str:
+        """Returns QGIS' own models folder, used when no custom folder is set."""
+        return os.path.join(
             QgsApplication.qgisSettingsDirPath(), "processing", "models"
         )
+
+    def initial_models_folder(self) -> str:
+        """Returns the models folder to pre-fill the widget with: the last folder
+        the user picked, or QGIS' own models folder if none was saved yet."""
+        saved_folder = PlgOptionsManager.get_plg_settings().models_folder
+        return saved_folder or self.default_models_folder()
+
+    def on_models_folder_changed(self, path: str):
+        """Keeps the browse dialog anchored to the chosen folder and refreshes the list."""
+        self.modelsFolderFileWidget.setDefaultRoot(path or self.default_models_folder())
+        self.reload_model_list()
+
+    def reload_model_list(self):
+        """Refreshes the model list widget from the currently selected models folder."""
+        self.modelListWidget.clear()
+        for model_file in self.model_list_file_name():
+            self.modelListWidget.addItem(model_file)
+
+    def model_list_file_name(self):
+        models_dir = (
+            self.modelsFolderFileWidget.filePath() or self.default_models_folder()
+        )
+
+        if not os.path.isdir(models_dir):
+            return []
 
         return [
             filename
